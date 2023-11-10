@@ -17,6 +17,7 @@
       "bundleIdentifier": "com.yonom.junction2023"
     },
     "android": {
+      "package": "com.yonom.junction2023",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

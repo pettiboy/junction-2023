@@ -1,5 +1,7 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 
 export const InstagramOverlay = () => {
-  return <View style={StyleSheet.absoluteFill}></View>;
+  return <SafeAreaView style={StyleSheet.absoluteFill}>
+    <Text>Hello</Text>
+  </SafeAreaView>;
 };
