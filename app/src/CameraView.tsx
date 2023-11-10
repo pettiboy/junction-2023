@@ -1,5 +1,6 @@
+import { FlipType, SaveFormat, manipulateAsync } from "expo-image-manipulator";
 import { useEffect, useRef, useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
 import MlkitOdt, {
   ObjectDetectionResult,
   ObjectDetectorMode,
@@ -16,11 +17,13 @@ type BoundingBoxResult = {
   left: number;
   width: number;
   height: number;
+  photo: PhotoFile;
+  detection: ObjectDetectionResult;
 };
 
 const getObjectDetectionResult = (photo: PhotoFile) => {
   return MlkitOdt.detectFromUri("file:///" + photo.path, {
-    detectorMode: ObjectDetectorMode.SINGLE_IMAGE,
+    detectorMode: ObjectDetectorMode.STREAM,
     shouldEnableClassification: false,
     shouldEnableMultipleObjects: false,
   });
@@ -28,10 +31,10 @@ const getObjectDetectionResult = (photo: PhotoFile) => {
 
 const getBoundingBox = (
   photo: PhotoFile,
-  res: ObjectDetectionResult | undefined
-) => {
-  if (!res) return;
-  const bounding = res.bounding;
+  detection: ObjectDetectionResult | undefined
+): BoundingBoxResult | undefined => {
+  if (!detection) return;
+  const { bounding } = detection;
 
   const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
   const { width: photoWidth, height: photoHeight } = photo;
@@ -42,6 +45,8 @@ const getBoundingBox = (
     width: bounding.height / photoHeight,
   };
   return {
+    photo,
+    detection,
     top: normalized.top * windowHeight,
     left:
       windowWidth -
@@ -50,6 +55,44 @@ const getBoundingBox = (
     height: normalized.height * windowHeight,
     width: normalized.width * windowWidth,
   };
+};
+
+const cropBoundingBox = async ({ photo, detection }: BoundingBoxResult) => {
+  const originY = Math.max(
+    0,
+    detection.bounding.originX - detection.bounding.width * 0.1
+  );
+  const originX = Math.max(
+    0,
+    photo.height -
+      detection.bounding.height -
+      detection.bounding.originY -
+      detection.bounding.height * 0.1
+  );
+  const height = Math.min(
+    photo.width - originX,
+    detection.bounding.width * 1.2
+  );
+  const width = Math.min(
+    photo.height - originY,
+    detection.bounding.height * 1.2
+  );
+
+  const manipResult = await manipulateAsync(
+    photo.path,
+    [
+      {
+        crop: {
+          originX,
+          originY,
+          width,
+          height,
+        },
+      },
+    ],
+    { base64: true, compress: 1, format: SaveFormat.JPEG }
+  );
+  return manipResult;
 };
 
 export const CameraView = () => {
@@ -65,6 +108,11 @@ export const CameraView = () => {
   const ref = useRef<Camera>(null);
   const [boundingBox, setBoundingBox] = useState<BoundingBoxResult>();
 
+  const [image, setImage] = useState<{
+    uri: string;
+    width: number;
+    height: number;
+  }>();
   useEffect(() => {
     let ended = false;
     const runLoop = () => {
@@ -78,6 +126,11 @@ export const CameraView = () => {
         const result = await getObjectDetectionResult(photo);
         const boundingBox = getBoundingBox(photo, result[0]);
         setBoundingBox(boundingBox);
+
+        if (boundingBox) {
+          const image = await cropBoundingBox(boundingBox);
+          setImage(image);
+        }
 
         // await FileSystem.deleteAsync(photo.path);
 
@@ -114,15 +167,15 @@ export const CameraView = () => {
           }}
         />
       )}
-      {/* {boundingBoxes?.map((box, index) => (
-        <View
-          key={index}
-          style={{
-            borderWidth: 2,
-            borderColor: "red",
-          }}
-        />
-      ))} */}
+      {/* {image && (
+        <View>
+          <Image
+            source={{ uri: image.uri }}
+            width={image.width / 3}
+            height={image.height / 3}
+          />
+        </View>
+      )} */}
     </>
   );
 };
