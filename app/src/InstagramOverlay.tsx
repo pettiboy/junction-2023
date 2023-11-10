@@ -1,4 +1,5 @@
 import { StyleSheet, View, Text, SafeAreaView, Image } from "react-native";
+import { CameraView } from "./CameraView";
 
 export const InstagramOverlay = () => {
   return (
@@ -6,12 +7,13 @@ export const InstagramOverlay = () => {
 
       {/* the top conatiner containing the camera */}
       <View style={{
-        backgroundColor: 'red',
+        // backgroundColor: 'red',
         height: "90%",
         width: "100%",
         borderRadius: 20,
         position: "relative"
       }}>
+        <CameraView />
         {/* the top container */}
         <View
           style={{
@@ -26,17 +28,17 @@ export const InstagramOverlay = () => {
           <Image
             source={require('../assets/insta/icons/close.png')}
             fadeDuration={0}
-            style={{ width: 25, height: 25 }}
+            style={styles.topContainerIcon}
           />
           <Image
             source={require('../assets/insta/icons/flash.png')}
             fadeDuration={0}
-            style={{ width: 25, height: 25 }}
+            style={styles.topContainerIcon}
           />
           <Image
             source={require('../assets/insta/icons/settings.png')}
             fadeDuration={0}
-            style={{ width: 25, height: 25 }}
+            style={styles.topContainerIcon}
           />
         </View>
 
@@ -99,11 +101,13 @@ export const InstagramOverlay = () => {
 
 const circleSize = 50;
 const styles = StyleSheet.create({
+  topContainerIcon: { width: 25, height: 25, tintColor: "white" },
+
   outerCircle: {
     width: circleSize + 4,
     height: circleSize + 4,
     borderRadius: circleSize,
-    backgroundColor: 'black',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
@@ -114,7 +118,7 @@ const styles = StyleSheet.create({
     width: circleSize,
     height: circleSize,
     borderRadius: circleSize,
-    backgroundColor: 'red',
+    backgroundColor: 'black',
   },
   innerInnerCircle: {
     width: circleSize - 4,
@@ -122,6 +126,6 @@ const styles = StyleSheet.create({
     marginTop: 2,
     marginLeft: 2,
     borderRadius: circleSize,
-    backgroundColor: 'black', // Change the color as needed
+    backgroundColor: 'white',
   },
 });

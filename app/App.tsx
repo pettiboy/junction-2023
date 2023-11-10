@@ -17,8 +17,8 @@ export default function App() {
 
   return (
     <>
-      <CameraView />
-      {/* <InstagramOverlay /> */}
+      {/* <CameraView /> */}
+      <InstagramOverlay />
     </>
   );
 }
