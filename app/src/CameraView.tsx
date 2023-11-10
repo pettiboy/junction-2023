@@ -1,5 +1,5 @@
 import { FlipType, SaveFormat, manipulateAsync } from "expo-image-manipulator";
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Dimensions, Image, StyleSheet, View } from "react-native";
 import MlkitOdt, {
   ObjectDetectionResult,
@@ -19,6 +19,8 @@ type BoundingBoxResult = {
   height: number;
   photo: PhotoFile;
   detection: ObjectDetectionResult;
+  sameIdRepetition: number;
+  classification?: GptClassification;
 };
 
 const getObjectDetectionResult = (photo: PhotoFile) => {
@@ -31,13 +33,15 @@ const getObjectDetectionResult = (photo: PhotoFile) => {
 
 const getBoundingBox = (
   photo: PhotoFile,
-  detection: ObjectDetectionResult | undefined
+  detection: ObjectDetectionResult | undefined,
+  lastBox: BoundingBoxResult | undefined
 ): BoundingBoxResult | undefined => {
   if (!detection) return;
   const { bounding } = detection;
 
   const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
   const { width: photoWidth, height: photoHeight } = photo;
+
   const normalized = {
     top: bounding.originX / photoWidth,
     leftEdgeFromRight: bounding.originY / photoHeight,
@@ -54,6 +58,10 @@ const getBoundingBox = (
       normalized.leftEdgeFromRight * windowWidth,
     height: normalized.height * windowHeight,
     width: normalized.width * windowWidth,
+    sameIdRepetition:
+      lastBox?.detection.trackingID === detection.trackingID
+        ? lastBox.sameIdRepetition + 1
+        : 0,
   };
 };
 
@@ -95,6 +103,58 @@ const cropBoundingBox = async ({ photo, detection }: BoundingBoxResult) => {
   return manipResult;
 };
 
+type GptClassification = {
+  label: string;
+};
+
+const uploadToGpt = async (imageBase64: string) => {
+  // TODO
+  return { label: "TODO" };
+  const res = await fetch("TODO", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      file: imageBase64,
+    }),
+  });
+  if (!res.ok) throw new Error("Failed to upload to GPT");
+  return (await res.json()) as GptClassification;
+};
+
+const takeAndProcessPhoto = async (
+  camera: Camera,
+  lastBox: BoundingBoxResult | undefined,
+  setBoundingBox: Dispatch<SetStateAction<BoundingBoxResult | undefined>>
+) => {
+  const photo = await camera.takePhoto({
+    flash: "off",
+    qualityPrioritization: "speed",
+    enableShutterSound: false,
+  });
+  const result = await getObjectDetectionResult(photo);
+  const boundingBox = getBoundingBox(photo, result[0], lastBox);
+
+  setBoundingBox(boundingBox);
+
+  // on second screenshot of the same object, take a screenshot and get GPT result from it
+  if (boundingBox && boundingBox.sameIdRepetition === 1) {
+    const image = await cropBoundingBox(boundingBox);
+    const classification = await uploadToGpt(image.base64);
+
+    setBoundingBox((b) => {
+      // only set bounding box if it's still the same object we're tracking
+      if (b.detection.trackingID !== boundingBox.detection.trackingID) return b;
+
+      return {
+        ...b,
+        classification,
+      };
+    });
+  }
+};
+
 export const CameraView = () => {
   const device = useCameraDevice("back");
   const format = useCameraFormat(device, [
@@ -108,31 +168,12 @@ export const CameraView = () => {
   const ref = useRef<Camera>(null);
   const [boundingBox, setBoundingBox] = useState<BoundingBoxResult>();
 
-  const [image, setImage] = useState<{
-    uri: string;
-    width: number;
-    height: number;
-  }>();
   useEffect(() => {
     let ended = false;
     const runLoop = () => {
       setTimeout(async () => {
         if (ended) return;
-        const photo = await ref.current.takePhoto({
-          flash: "off",
-          qualityPrioritization: "speed",
-          enableShutterSound: false,
-        });
-        const result = await getObjectDetectionResult(photo);
-        const boundingBox = getBoundingBox(photo, result[0]);
-        setBoundingBox(boundingBox);
-
-        if (boundingBox) {
-          const image = await cropBoundingBox(boundingBox);
-          setImage(image);
-        }
-
-        // await FileSystem.deleteAsync(photo.path);
+        await takeAndProcessPhoto(ref.current!, boundingBox, setBoundingBox);
 
         runLoop();
       }, 1000);
@@ -167,15 +208,6 @@ export const CameraView = () => {
           }}
         />
       )}
-      {/* {image && (
-        <View>
-          <Image
-            source={{ uri: image.uri }}
-            width={image.width / 3}
-            height={image.height / 3}
-          />
-        </View>
-      )} */}
     </>
   );
 };
