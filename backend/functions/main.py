@@ -4,6 +4,9 @@
 
 from firebase_functions import https_fn
 from firebase_admin import initialize_app
+from firebase_functions import options
+
+options.set_global_options(max_instances=10)
 
 initialize_app()
 
