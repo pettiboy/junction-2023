@@ -5271,6 +5271,11 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-native-mlkit-odt@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/react-native-mlkit-odt/-/react-native-mlkit-odt-0.1.3.tgz#7a0f665f9dcb844fe26bd1bd0d81ff03434e819c"
+  integrity sha512-og1Co/YWJds5cwZOB0+fSUnQDRw03BvhrjQNqhuaMGx8rJ9E1SWuCoQC9vqfwtiP13unILrfkPh+yEF23fr/qQ==
+
 react-native-reanimated@^3.5.4:
   version "3.5.4"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.5.4.tgz#a6c2b0c43b6dad246f5d276213974afedb8e3fc7"
