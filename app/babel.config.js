@@ -1,14 +1,10 @@
 module.exports = function (api) {
   api.cache(true);
   return {
-    presets: [
-      "babel-preset-expo",
-      [
-        "react-native-reanimated/plugin",
-        {
-          globals: ["__labelImage"],
-        },
-      ],
+    plugins: [
+      "react-native-reanimated/plugin",
+      "react-native-worklets-core/plugin",
     ],
+    presets: ["babel-preset-expo"],
   };
 };
