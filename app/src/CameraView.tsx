@@ -1,6 +1,6 @@
 import { FlipType, SaveFormat, manipulateAsync } from "expo-image-manipulator";
 import { useEffect, useRef, useState } from "react";
-import { Dimensions, Image, StyleSheet, View } from "react-native";
+import { Dimensions, Image, StyleSheet, View, Text, } from "react-native";
 import MlkitOdt, {
   ObjectDetectionResult,
   ObjectDetectorMode,
@@ -65,9 +65,9 @@ const cropBoundingBox = async ({ photo, detection }: BoundingBoxResult) => {
   const originX = Math.max(
     0,
     photo.height -
-      detection.bounding.height -
-      detection.bounding.originY -
-      detection.bounding.height * 0.1
+    detection.bounding.height -
+    detection.bounding.originY -
+    detection.bounding.height * 0.1
   );
   const height = Math.min(
     photo.width - originX,
@@ -155,17 +155,50 @@ export const CameraView = () => {
         orientation="portrait"
       />
       {boundingBox && (
-        <View
-          style={{
-            position: "absolute",
-            top: boundingBox.top,
-            left: boundingBox.left,
-            width: boundingBox.width,
-            height: boundingBox.height,
-            borderWidth: 2,
-            borderColor: "red",
-          }}
-        />
+        <>
+          <View
+            style={{
+              position: "absolute",
+              top: boundingBox.top - 50,
+              left: boundingBox.left,
+              width: boundingBox.width,
+              height: boundingBox.height,
+              borderWidth: 2,
+              borderColor: "red",
+            }}
+          ></View>
+
+          {/* Frosted glass card */}
+          <View
+            style={{
+              position: "absolute",
+              top: boundingBox.top - 50, // Adjust the position as needed
+              left: boundingBox.left,
+              width: boundingBox.width,
+              height: 150, // Adjust the height as needed
+              borderRadius: 8,
+            }}
+          // blurType="light"
+          // blurAmount={10}
+          // reducedTransparencyFallbackColor="white"
+          >
+            {/* Card content */}
+            <View style={{ padding: 10 }}>
+              <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>
+                Item: Bicycle
+              </Text>
+              <Text style={{ fontSize: 14, marginBottom: 5 }}>
+                Recyclability: 3/5
+              </Text>
+              <Text style={{ fontSize: 14, marginBottom: 5 }}>
+                Materials to recycle: ???
+              </Text>
+              <Text style={{ fontSize: 14 }}>
+                How to recycle: Go to ...
+              </Text>
+            </View>
+          </View>
+        </>
       )}
       {/* {image && (
         <View>
