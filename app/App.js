@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 
 import MlkitOdt, { ObjectDetectorMode } from "react-native-mlkit-odt";
@@ -5,6 +6,7 @@ import MlkitOdt, { ObjectDetectorMode } from "react-native-mlkit-odt";
 import {
   Camera,
   CameraPermissionStatus,
+  useCameraDevice,
   useFrameProcessor,
 } from "react-native-vision-camera";
 
@@ -21,7 +23,12 @@ const CameraView = () => {
 
   if (device == null) return <NoCameraErrorView />;
   return (
-    <Camera style={StyleSheet.absoluteFill} device={device} isActive={true} />
+    <Camera
+      style={StyleSheet.absoluteFill}
+      device={device}
+      isActive={true}
+      frameProcessor={frameProcessor}
+    />
   );
 };
 
@@ -32,11 +39,9 @@ export default function App() {
     Camera.getCameraPermissionStatus().then(setCameraPermission);
   }, []);
 
-  console.log(
-    `Re-rendering Navigator. Camera: ${cameraPermission} | Microphone: ${microphonePermission}`
-  );
+  console.log(`Re-rendering Navigator. Camera: ${cameraPermission}`);
 
-  if (cameraPermission == null || microphonePermission == null) {
+  if (cameraPermission == null) {
     return null;
   }
 
