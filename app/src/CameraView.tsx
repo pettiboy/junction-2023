@@ -154,32 +154,36 @@ const takeAndProcessPhoto = async (
   });
   const result = await getObjectDetectionResult(photo);
 
-  let boundingBox;
+  const getGptResultAsync = async (boundingBox: BoundingBoxResult) => {
+    // on second screenshot of the same object, take a screenshot and get GPT result from it
+    if (boundingBox && boundingBox.sameIdRepetition === 1) {
+      const image = await cropBoundingBox(boundingBox);
+
+      console.log("got cropped image");
+      console.log(image.base64.substring(0, 50) + "...");
+
+      const classification = await uploadToGpt(image.base64);
+
+      console.log(classification);
+
+      setBoundingBox((b) => {
+        // only set bounding box if it's still the same object we're tracking
+        if (b.detection.trackingID !== boundingBox.detection.trackingID)
+          return b;
+
+        return {
+          ...b,
+          classification,
+        };
+      });
+    }
+  };
+
   setBoundingBox((lastBox) => {
-    return (boundingBox = getBoundingBox(photo, result[0], lastBox));
+    const box = getBoundingBox(photo, result[0], lastBox);
+    void getGptResultAsync(box); // do not await
+    return box;
   });
-
-  // on second screenshot of the same object, take a screenshot and get GPT result from it
-  if (boundingBox && boundingBox.sameIdRepetition === 1) {
-    const image = await cropBoundingBox(boundingBox);
-
-    console.log("got cropped image");
-    console.log(image.base64.substring(0, 50) + "...");
-
-    const classification = await uploadToGpt(image.base64);
-
-    console.log(classification);
-
-    setBoundingBox((b) => {
-      // only set bounding box if it's still the same object we're tracking
-      if (b.detection.trackingID !== boundingBox.detection.trackingID) return b;
-
-      return {
-        ...b,
-        classification,
-      };
-    });
-  }
 };
 
 export const CameraView = () => {
