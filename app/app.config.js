@@ -49,6 +49,7 @@ export default {
         RNMapboxMapsDownloadToken: process.env.MAPBOX_DOWNLOAD_KEY,
       },
     ],
+    "expo-router",
   ],
   extra: {
     eas: {
