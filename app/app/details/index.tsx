@@ -1,6 +1,6 @@
-import { useNavigation } from "expo-router";
+import { Link, router, useNavigation } from "expo-router";
 import React from "react";
-import { Dimensions, SafeAreaView, Text, View, ScrollView } from "react-native"
+import { Dimensions, SafeAreaView, Text, View, ScrollView, TouchableOpacity } from "react-native"
 import {
     LineChart,
     BarChart,
@@ -59,7 +59,7 @@ const DetailsScreen = (props: Props) => {
             <ScrollView>
                 {/* header */}
                 <View style={{ display: "flex", flexDirection: "row" }}>
-                    <View style={{ position: "relative", flex: 0.6, height: chartHeight + containerPadding }}>
+                    <TouchableOpacity onPress={() => router.replace('/wallet')} style={{ position: "relative", flex: 0.6, height: chartHeight + containerPadding }}>
                         <ProgressChart
                             data={{
                                 labels: ["Swim"],
@@ -76,9 +76,9 @@ const DetailsScreen = (props: Props) => {
 
                         <Text style={{ position: "absolute", top: "44%", left: "40%", fontSize: 36 }}>{points}</Text>
                         <Text style={{ position: "absolute", top: "35%", left: "28%", fontSize: 12 }}>GreenDropSpot</Text>
-                    </View>
+                    </TouchableOpacity>
                     <View style={{
-                        marginLeft: 10, marginVertical: 10, padding: 10, backgroundColor: chartConfig.backgroundGradientTo, borderRadius: style.borderRadius, flex: 0.4, marginLeft: 20,
+                        marginLeft: 10, marginVertical: 10, padding: 10, backgroundColor: chartConfig.backgroundGradientTo, borderRadius: style.borderRadius, flex: 0.4,
                         justifyContent: "center",
                         alignItems: "center"
                     }}>
