@@ -14,10 +14,9 @@ def index():
 
 
 def get_item_name(image):
-    # dummy
     return "Logitech Mouse M100"
 
-    client = OpenAI(api_key=gpt_api_key)
+    client = OpenAI(api_key=gpt_api_key, organization="org-2iCQF8p3ckAhkJzwkoG6yuhH")
     response = client.chat.completions.create(
         model="gpt-4-vision-preview",
         messages=[
@@ -65,7 +64,7 @@ def get_typed_response(item_name):
         "required": ["item_name", "statement", "saved_CO2_kg", "comparision"],
     }
 
-    client = OpenAI(api_key=gpt_api_key)
+    client = OpenAI(api_key=gpt_api_key, organization="org-2iCQF8p3ckAhkJzwkoG6yuhH")
     response = client.chat.completions.create(
         model="gpt-4-1106-preview",
         messages=[
