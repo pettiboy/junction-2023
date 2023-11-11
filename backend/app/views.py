@@ -82,7 +82,7 @@ def get_typed_response(item_name):
 
     print(response.choices[0].message.function_call.arguments)
 
-    return response.choices[0].message.function_call.arguments
+    return json.loads(response.choices[0].message.function_call.arguments)
 
 
 @app.route("/generate-response", methods=["POST"])
