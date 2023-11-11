@@ -60,7 +60,7 @@ const DetailsCard: FC<Props> = ({ boundingBox }) => {
 
   const center = {
     x: boundingBox.left + boundingBox.width / 2,
-    y: boundingBox.top + boundingBox.height / 2 * 0.6,
+    y: boundingBox.top + (boundingBox.height / 2) * 0.6,
     width: 200,
     height: 180,
   };
@@ -112,14 +112,28 @@ const DetailsCard: FC<Props> = ({ boundingBox }) => {
                   textAlign: "center",
                   marginBottom: 8,
                   color: "#fff",
+                  fontFamily: "Poppins_700Bold",
                 }}
               >
                 {classification.item_name}
               </Text>
-              <Text style={{ fontSize: 16, color: "#fff" }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: "#fff",
+                  fontFamily: "Poppins_500Medium",
+                }}
+              >
                 {classification.saved_CO2_kg} kg CO2
               </Text>
-              <Text style={{ fontSize: 16, marginBottom: 8, color: "#fff" }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  marginBottom: 8,
+                  color: "#fff",
+                  fontFamily: "Poppins_500Medium",
+                }}
+              >
                 {classification.comparision}
               </Text>
               <Text
@@ -128,6 +142,7 @@ const DetailsCard: FC<Props> = ({ boundingBox }) => {
                   fontWeight: "bold",
                   marginBottom: 16,
                   color: "#fff",
+                  fontFamily: "Poppins_700Bold",
                 }}
               >
                 {classification.saved_CO2_kg.toFixed()} points
@@ -141,7 +156,13 @@ const DetailsCard: FC<Props> = ({ boundingBox }) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={{ fontSize: 14, fontWeight: "bold" }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontWeight: "bold",
+                    fontFamily: "Poppins_700Bold",
+                  }}
+                >
                   Details
                 </Text>
               </View>
