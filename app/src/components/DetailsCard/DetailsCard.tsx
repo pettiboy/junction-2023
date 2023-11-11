@@ -21,7 +21,7 @@ const DetailsCard: FC<Props> = ({ boundingBox }) => {
   const { classification } = boundingBox;
 
   const parentHeight = useSharedValue(0);
-  if (Math.abs(parentHeight.value - boundingBox.height) > 50)
+  if (Math.abs(parentHeight.value - boundingBox.height) > 100)
     parentHeight.value = boundingBox.height - 5;
   const style = useAnimatedStyle(() => {
     return {
@@ -95,30 +95,39 @@ const DetailsCard: FC<Props> = ({ boundingBox }) => {
           intensity={15}
         >
           {/* Card content */}
-          <Link href="/details">
-            <View style={{ padding: 10, alignItems: "center" }}>
+          <Link href="/details" style={{ flex: 1 }}>
+            <View
+              style={{
+                flex: 1,
+                padding: 10,
+                alignItems: "center",
+                width: center.width,
+                height: center.height,
+              }}
+            >
               <Text
                 style={{
                   fontSize: 20,
                   fontWeight: "bold",
                   textAlign: "center",
                   marginBottom: 8,
+                  color: "#fff",
                 }}
               >
                 {classification.item_name}
               </Text>
-              <Text style={{ fontSize: 16 }}>
+              <Text style={{ fontSize: 16, color: "#fff" }}>
                 recycle {classification.saved_CO2_kg} kg CO2
               </Text>
-              <Text style={{ fontSize: 16, marginBottom: 8 }}>
+              <Text style={{ fontSize: 16, marginBottom: 8, color: "#fff" }}>
                 {classification.comparision}
               </Text>
-              <Text style={{ fontSize: 16, marginBottom: 8 }}>
+              <Text style={{ fontSize: 16, marginBottom: 16, color: "#fff" }}>
                 {classification.saved_CO2_kg.toFixed()} Points
               </Text>
               <View
                 style={{
-                  backgroundColor: "#006CA5",
+                  backgroundColor: "#97d197",
                   padding: 8,
                   alignSelf: "stretch",
                   borderRadius: 8,

@@ -109,6 +109,7 @@ const uploadToGpt = async (imageBase64: string) => {
   });
   console.log("asking GPT");
   // console.log(imageBase64)
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   return {
     item_name: "Power Bank",
     saved_CO2_kg: 10,
