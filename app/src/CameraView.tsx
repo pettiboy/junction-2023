@@ -27,7 +27,6 @@ type BoundingBoxResult = {
 };
 
 const getObjectDetectionResult = (photo: PhotoFile) => {
-  console.log("asking MLKit");
   return MlkitOdt.detectFromUri("file:///" + photo.path, {
     detectorMode: ObjectDetectorMode.STREAM,
     shouldEnableClassification: false,
@@ -52,6 +51,7 @@ const getBoundingBox = (
     height: bounding.width / photoWidth,
     width: bounding.height / photoHeight,
   };
+
   return {
     photo,
     detection,
@@ -117,7 +117,6 @@ type GptClassification = {
 
 const uploadToGpt = async (imageBase64: string) => {
   // TODO
-  // return { label: "TODO" };
   console.log("asking GPT");
   // console.log(imageBase64)
   // return
@@ -146,7 +145,6 @@ const uploadToGpt = async (imageBase64: string) => {
 
 const takeAndProcessPhoto = async (
   camera: Camera,
-  lastBox: BoundingBoxResult | undefined,
   setBoundingBox: Dispatch<SetStateAction<BoundingBoxResult | undefined>>
 ) => {
   const photo = await camera.takePhoto({
@@ -155,10 +153,11 @@ const takeAndProcessPhoto = async (
     enableShutterSound: false,
   });
   const result = await getObjectDetectionResult(photo);
-  const boundingBox = getBoundingBox(photo, result[0], lastBox);
 
-  setBoundingBox(boundingBox);
-  console.log(boundingBox?.sameIdRepetition);
+  let boundingBox;
+  setBoundingBox((lastBox) => {
+    return (boundingBox = getBoundingBox(photo, result[0], lastBox));
+  });
 
   // on second screenshot of the same object, take a screenshot and get GPT result from it
   if (boundingBox && boundingBox.sameIdRepetition === 1) {
@@ -193,6 +192,7 @@ export const CameraView = () => {
       },
     },
   ]);
+
   const ref = useRef<Camera>(null);
   const [boundingBox, setBoundingBox] = useState<BoundingBoxResult>();
 
@@ -201,7 +201,7 @@ export const CameraView = () => {
     const runLoop = () => {
       setTimeout(async () => {
         if (ended) return;
-        await takeAndProcessPhoto(ref.current!, boundingBox, setBoundingBox);
+        await takeAndProcessPhoto(ref.current!, setBoundingBox);
 
         runLoop();
       }, 1000);
