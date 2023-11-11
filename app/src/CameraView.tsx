@@ -14,17 +14,7 @@ import {
 } from "react-native-vision-camera";
 import DetailsCard from "./components/DetailsCard/DetailsCard";
 import { convertToObject } from "typescript";
-
-type BoundingBoxResult = {
-  top: number;
-  left: number;
-  width: number;
-  height: number;
-  photo: PhotoFile;
-  detection: ObjectDetectionResult;
-  sameIdRepetition: number;
-  classification?: GptClassification;
-};
+import { BoundingBoxResult, GptClassification } from "./BoundingBoxResult";
 
 const getObjectDetectionResult = (photo: PhotoFile) => {
   return MlkitOdt.detectFromUri("file:///" + photo.path, {
@@ -82,9 +72,9 @@ const cropBoundingBox = async ({ photo, detection }: BoundingBoxResult) => {
   const originX = Math.max(
     0,
     photo.height -
-    detection.bounding.height -
-    detection.bounding.originY -
-    detection.bounding.height * 0.1
+      detection.bounding.height -
+      detection.bounding.originY -
+      detection.bounding.height * 0.1
   );
   const height = Math.min(
     photo.width - originX,
@@ -112,12 +102,11 @@ const cropBoundingBox = async ({ photo, detection }: BoundingBoxResult) => {
   return manipResult;
 };
 
-type GptClassification = {
-  label: string;
-};
-
 const uploadToGpt = async (imageBase64: string) => {
   // TODO
+  const body = JSON.stringify({
+    image: imageBase64,
+  });
   console.log("asking GPT");
   // console.log(imageBase64)
   // return
@@ -129,9 +118,7 @@ const uploadToGpt = async (imageBase64: string) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        image: imageBase64,
-      }),
+      body,
     }
   );
   if (!res.ok) {
@@ -200,7 +187,9 @@ export const CameraView = () => {
   ]);
 
   const ref = useRef<Camera>(null);
-  const [boundingBox, setBoundingBox] = useState<BoundingBoxResult>();
+  const [boundingBox, setBoundingBox] = useState<BoundingBoxResult | null>(
+    null
+  );
 
   useEffect(() => {
     let ended = false;
@@ -230,7 +219,7 @@ export const CameraView = () => {
         orientation="portrait"
       />
 
-      <DetailsCard boundingBox={boundingBox} />
+      {boundingBox && <DetailsCard boundingBox={boundingBox} />}
     </>
   );
 };
