@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
 import Mapbox from '@rnmapbox/maps';
 import * as Location from 'expo-location';
 
@@ -21,6 +21,7 @@ const MapContainer = (props: Props) => {
             }
 
             let location = await Location.getCurrentPositionAsync({});
+            console.log(location);
             setLocation(location);
         })();
     }, []);
@@ -35,8 +36,27 @@ const MapContainer = (props: Props) => {
     return (
         <View style={styles.page}>
             <View style={styles.container}>
-                <Mapbox.MapView style={styles.map}>
-                </Mapbox.MapView>
+
+
+                {location ? (
+                    <Mapbox.MapView style={{
+                        borderRadius: 10,
+                        flex: 1,
+                    }} styleURL='mapbox://styles/mbmph/clou6gqg400vg01qm0mttcdpj'>
+                        <Mapbox.Camera
+                            zoomLevel={16} // Adjust the initial zoom level as desired
+                            centerCoordinate={[
+                                location.coords.longitude,
+                                location.coords.latitude,
+                            ]}
+                            animationMode="flyTo"
+                            animationDuration={500}
+                        />
+                    </Mapbox.MapView>
+                ) : <View style={{ backgroundColor: "#C0E3C0", borderRadius: 20, padding: 20 }}>
+                    <ActivityIndicator style={{ transform: [{ scale: 2 }], margin: 20, }} color={"darkgreen"} size={50} />
+                    <Text style={{ textAlign: "center", fontSize: 26 }}>Loading Map</Text>
+                </View>}
             </View>
         </View>
     )
@@ -44,14 +64,18 @@ const MapContainer = (props: Props) => {
 
 const styles = StyleSheet.create({
     page: {
-        borderRadius: 10,
+        borderRadius: 20,
+        marginBottom: 100
     },
     container: {
         height: 300,
-        width: "100%",
+        // width: "100%",
+        borderRadius: 20,
+        overflow: 'hidden'
     },
     map: {
         flex: 1,
+        borderRadius: 20,
     }
 });
 

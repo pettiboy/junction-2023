@@ -207,7 +207,7 @@ const DetailsScreen = (props: Props) => {
                     />
                 </View> */}
 
-                {/* <MapContainer /> */}
+                <MapContainer />
 
 
             </ScrollView>
