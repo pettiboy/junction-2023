@@ -82,9 +82,9 @@ const cropBoundingBox = async ({ photo, detection }: BoundingBoxResult) => {
   const originX = Math.max(
     0,
     photo.height -
-      detection.bounding.height -
-      detection.bounding.originY -
-      detection.bounding.height * 0.1
+    detection.bounding.height -
+    detection.bounding.originY -
+    detection.bounding.height * 0.1
   );
   const height = Math.min(
     photo.width - originX,
