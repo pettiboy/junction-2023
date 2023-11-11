@@ -9,6 +9,7 @@ import {
     ContributionGraph,
     StackedBarChart
 } from "react-native-chart-kit";
+import MapContainer from "../../src/components/MapContainer/MapContainer";
 
 type Props = {}
 
@@ -113,6 +114,9 @@ const DetailsScreen = (props: Props) => {
                         chartConfig={chartConfig}
                     />
                 </View>
+
+                {/* <MapContainer /> */}
+
                 <View>
                     <PieChart
                         data={[
