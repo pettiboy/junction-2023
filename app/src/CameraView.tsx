@@ -122,7 +122,7 @@ const uploadToGpt = async (imageBase64: string) => {
   // return
 
   const res = await fetch(
-    "https://c895-2001-14bb-111-af71-7807-c07b-b06e-d28b.ngrok-free.app/generate-response",
+    "https://junction-backend-vok2n3ogoq-lz.a.run.app/generate-response",
     {
       method: "POST",
       headers: {
