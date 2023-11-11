@@ -109,7 +109,7 @@ const uploadToGpt = async (imageBase64: string) => {
   });
   console.log("asking GPT");
   // console.log(imageBase64)
-  return
+  return;
 
   const res = await fetch(
     "https://junction-backend-vok2n3ogoq-lz.a.run.app/generate-response",
@@ -157,7 +157,7 @@ const takeAndProcessPhoto = async (
 
       setBoundingBox((b) => {
         // only set bounding box if it's still the same object we're tracking
-        if (b.detection.trackingID !== boundingBox.detection.trackingID)
+        if (b?.detection.trackingID !== boundingBox.detection.trackingID)
           return b;
 
         return {
@@ -190,8 +190,6 @@ export const CameraView = () => {
   const [boundingBox, setBoundingBox] = useState<BoundingBoxResult | null>(
     null
   );
-
-  
 
   useEffect(() => {
     let ended = false;

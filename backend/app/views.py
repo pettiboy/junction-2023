@@ -129,11 +129,12 @@ def get_item_recycle_info():
 
     client = OpenAI(api_key=gpt_api_key)
 
-    schema = (
-        {
-            "type": "object",
-            "properties": {
-                "rm_data": {
+    schema = {
+        "type": "object",
+        "properties": {
+            "rm_data": {
+                "type": "array",
+                "items": {
                     "type": "object",
                     "properties": {
                         "material": {"type": "string"},
@@ -141,25 +142,27 @@ def get_item_recycle_info():
                     },
                 },
             },
-            "required": ["rm_data"],
         },
-    )
+        "required": ["rm_data"],
+    }
 
     response = client.chat.completions.create(
         model="gpt-4-1106-preview",
         messages=[
             {
                 "role": "system",
-                "content": f"What raw materials can be recycled and in what percentage from ${item_name}? Please provide the information in the following schema: {json.dumps(schema)}. The response should only contain JSON and no other text.",
+                "content": f"What raw materials can be recycled and in what percentage from ${item_name}?",
             },
             {
                 "role": "user",
                 "content": item_name,
             },
         ],
+        functions=[{"name": "print", "parameters": schema}],
+        function_call={"name": "print"},
         max_tokens=500,
     )
 
-    print(response.choices[0].message.content)
+    print(response.choices[0].message.function_call.arguments)
 
-    return json.loads(response.choices[0].message.content.replace("json", ""))
+    return json.loads(response.choices[0].message.function_call.arguments)

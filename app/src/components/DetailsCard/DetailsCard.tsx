@@ -1,8 +1,17 @@
 import { BlurView } from "expo-blur";
 import { View, Text, TouchableOpacity } from "react-native";
 import { BoundingBoxResult } from "../../BoundingBoxResult";
-import { FC } from "react";
+import { FC, useDeferredValue } from "react";
 import { Link } from "expo-router";
+import Animated, {
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 
 type Props = {
   boundingBox: BoundingBoxResult;
@@ -11,7 +20,43 @@ type Props = {
 const DetailsCard: FC<Props> = ({ boundingBox }) => {
   const { classification } = boundingBox;
 
-  if (!classification) return null;
+  const parentHeight = useSharedValue(0);
+  if (Math.abs(parentHeight.value - boundingBox.height) > 50)
+    parentHeight.value = boundingBox.height - 5;
+  const style = useAnimatedStyle(() => {
+    return {
+      width: "100%",
+      height: 5,
+      backgroundColor: "#fff",
+      top: withRepeat(
+        withSequence(
+          withTiming(parentHeight.value, { duration: 500 }),
+          withTiming(0, { duration: 500 })
+        ),
+        -1,
+        true
+      ),
+    };
+  }, []);
+
+  const border = (
+    <View
+      style={{
+        position: "absolute",
+        // borderWidth: 2,
+        // borderColor: "#fff",
+        borderRadius: 16,
+        overflow: "hidden",
+        top: boundingBox.top,
+        left: boundingBox.left,
+        width: boundingBox.width,
+        height: boundingBox.height,
+      }}
+    >
+      <Animated.View style={style}></Animated.View>
+    </View>
+  );
+  if (!classification) return border;
 
   const center = {
     x: boundingBox.left + boundingBox.width / 2,
@@ -21,69 +66,72 @@ const DetailsCard: FC<Props> = ({ boundingBox }) => {
   };
 
   return (
-    <View
-      style={{
-        position: "absolute",
-        top: center.y,
-        left: center.x,
-
-        width: center.width,
-        height: center.height,
-
-        borderRadius: 16,
-        overflow: "hidden",
-        transform: [
-          { translateX: -center.width / 2 },
-          { translateY: -center.height / 2 },
-          { scale: boundingBox.width / center.width },
-        ],
-      }}
-    >
-      <BlurView
+    <>
+      {/* {border} */}
+      <View
         style={{
-          // position: "absolute",
-          flex: 1,
+          position: "absolute",
+          top: center.y,
+          left: center.x,
+
+          width: center.width,
+          height: center.height,
+
+          borderRadius: 16,
+          overflow: "hidden",
+          transform: [
+            { translateX: -center.width / 2 },
+            { translateY: -center.height / 2 },
+            { scale: boundingBox.width / center.width },
+          ],
         }}
-        tint="light"
-        intensity={15}
       >
-        {/* Card content */}
-        <Link href="/details">
-          <View style={{ padding: 10, alignItems: "center" }}>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: "bold",
-                textAlign: "center",
-                marginBottom: 8,
-              }}
-            >
-              {classification.item_name}
-            </Text>
-            <Text style={{ fontSize: 16 }}>
-              recycle {classification.saved_CO2_kg} kg CO2
-            </Text>
-            <Text style={{ fontSize: 16, marginBottom: 8 }}>
-              {classification.comparision}
-            </Text>
-            <Text style={{ fontSize: 16, marginBottom: 8 }}>
-              {classification.saved_CO2_kg.toFixed()} Points
-            </Text>
-            <View
-              style={{
-                backgroundColor: "#006CA5",
-                padding: 8,
-                alignSelf: "stretch",
-                borderRadius: 8,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ fontSize: 14 }}>Details...</Text>
+        <BlurView
+          style={{
+            // position: "absolute",
+            flex: 1,
+          }}
+          tint="light"
+          intensity={15}
+        >
+          {/* Card content */}
+          <Link href="/details">
+            <View style={{ padding: 10, alignItems: "center" }}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  marginBottom: 8,
+                }}
+              >
+                {classification.item_name}
+              </Text>
+              <Text style={{ fontSize: 16 }}>
+                recycle {classification.saved_CO2_kg} kg CO2
+              </Text>
+              <Text style={{ fontSize: 16, marginBottom: 8 }}>
+                {classification.comparision}
+              </Text>
+              <Text style={{ fontSize: 16, marginBottom: 8 }}>
+                {classification.saved_CO2_kg.toFixed()} Points
+              </Text>
+              <View
+                style={{
+                  backgroundColor: "#006CA5",
+                  padding: 8,
+                  alignSelf: "stretch",
+                  borderRadius: 8,
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ fontSize: 14 }}>Details...</Text>
+              </View>
             </View>
-          </View>
-        </Link>
-      </BlurView>
-    </View>
+          </Link>
+        </BlurView>
+      </View>
+    </>
   );
 };
 
