@@ -134,10 +134,13 @@ def get_item_recycle_info():
             "type": "object",
             "properties": {
                 "rm_data": {
-                    "type": "object",
-                    "properties": {
-                        "material": {"type": "string"},
-                        "percentage": {"type": "number"},
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "material": {"type": "string"},
+                            "percentage": {"type": "number"},
+                        },
                     },
                 },
             },
