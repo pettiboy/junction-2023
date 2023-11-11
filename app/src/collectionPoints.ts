@@ -7,11 +7,11 @@ type CollectionPoint = {
   };
 };
 
-async function getCollectionPointsNearby(
+export async function getCollectionPointsNearby(
   latitude: number,
   longitude: number,
   distance: number = 5000, // distance in meters
-  apiKey: string = process.env.EXPO_PUBLIC_KIERRATYS_API_KEY
+  apiKey: string = "e41aa630dd257fe9cf136fcf07ec5394de88b980"
 ): Promise<CollectionPoint[]> {
   try {
     // Construct the API URL with the user's location and desired search radius

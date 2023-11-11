@@ -110,11 +110,11 @@ const uploadToGpt = async (imageBase64: string) => {
   console.log("asking GPT");
   // console.log(imageBase64)
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  return {
-    item_name: "Power Bank",
-    saved_CO2_kg: 15,
-    comparision: "= planting 30 trees",
-  };
+  // return {
+  //   item_name: "Power Bank",
+  //   saved_CO2_kg: 15,
+  //   comparision: "= planting 30 trees",
+  // };
 
   const res = await fetch(
     "https://junction-backend-vok2n3ogoq-lz.a.run.app/generate-response",

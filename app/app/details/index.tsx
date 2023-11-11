@@ -1,5 +1,5 @@
 import { Link, router, useNavigation } from "expo-router";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Dimensions,
   SafeAreaView,
@@ -24,7 +24,37 @@ type Props = {};
 const DetailsScreen = (props: Props) => {
   const { currentObjectInfo } = useContext(MaterialContext)
 
+  const [resourcesChartData, setResourcesChartData] = React.useState<OutputData[]>([]);
+
   const navigation = useNavigation();
+
+
+  useEffect(() => {
+    if (!currentObjectInfo) return
+
+    (async () => {
+      const res = await fetch(
+        `https://junction-backend-vok2n3ogoq-lz.a.run.app/get-item-recycle-info?item_name=${currentObjectInfo.item_name}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        console.log(res.status);
+        throw new Error("Failed to upload to GPT");
+      }
+
+      console.log("got GPT response");
+
+      const json = await res.json() as ResourcesResponseData;
+
+      setResourcesChartData(transformData(json))
+      console.log(json, "rm data json");
+    })()
+  }, [])
 
 
 
@@ -63,7 +93,18 @@ const DetailsScreen = (props: Props) => {
   const containerPadding = 20;
   const chartHeight = 220;
 
-  const points = 15;
+  const points = currentObjectInfo?.saved_CO2_kg || 0;
+
+
+  const transformData = (inputData: ResourcesResponseData): OutputData[] => {
+    const colorPalette = ["#4CAF50", "#689F38", "#8BC34A", "#CDDC39", "#FFEB3B"];
+
+    return inputData.rm_data.map((item, index) => ({
+      name: item.material.length > 7 ? item.material.slice(0, 7) + "..." : item.material,
+      population: item.percentage,
+      color: colorPalette[index] || "#000000", // Use a default color if colorPalette is exhausted
+    }));
+  };
 
   return (
     <SafeAreaView style={{ marginHorizontal: containerPadding }}>
@@ -80,7 +121,7 @@ const DetailsScreen = (props: Props) => {
           >
             <ProgressChart
               data={{
-                labels: ["Swim"],
+                labels: ["Points"],
                 data: [points / 100],
               }}
               width={windowWidth / 2}
@@ -170,34 +211,8 @@ const DetailsScreen = (props: Props) => {
           }}
         >
           <PieChart
-            data={[
-              {
-                name: "Lithium",
-                population: 25,
-                color: "#4CAF50", // Green color
-              },
-              {
-                name: "Cobalt",
-                population: 10,
-                color: "#689F38", // Dark green color
-              },
-              {
-                name: "Nickel",
-                population: 15,
-                color: "#8BC34A", // Light green color
-              },
-              {
-                name: "Copper",
-                population: 20,
-                color: "#CDDC39", // Lime color
-              },
-              {
-                name: "Aluminium",
-                population: 30,
-                color: "#FFEB3B", // Yellow color
-              },
-            ]}
-            width={windowWidth - containerPadding * 2 - 20}
+            data={resourcesChartData}
+            width={windowWidth - containerPadding * 2 - 30}
             height={chartHeight}
             chartConfig={{
               ...chartConfig,
@@ -326,5 +341,19 @@ const DetailsScreen = (props: Props) => {
     </SafeAreaView>
   );
 };
+
+
+interface ResourcesResponseData {
+  rm_data: {
+    material: string;
+    percentage: number;
+  }[];
+}
+
+interface OutputData {
+  name: string;
+  population: number;
+  color: string;
+}
 
 export default DetailsScreen;

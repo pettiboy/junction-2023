@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ActivityIndicator, Image, Linking, TouchableOpacity } from 'react-native';
 import Mapbox from '@rnmapbox/maps';
 import * as Location from 'expo-location';
+import { getCollectionPointsNearby } from '../../collectionPoints';
 
 Mapbox.setAccessToken(
     "pk.eyJ1IjoibWJtcGgiLCJhIjoiY2tya2F0OTJvMGk1YjJwbGZ1bDJ1eGU0dCJ9.fLJp01SsIpdhGmWdBzaSnQ"
@@ -26,6 +27,12 @@ const MapContainer = (props: Props) => {
             setLocation(location);
         })();
     }, []);
+
+    useEffect(() => {
+        if (!location) return
+
+        console.log(getCollectionPointsNearby(location.coords.latitude, location.coords.longitude))
+    }, [location])
 
     let text = 'Waiting..';
     if (errorMsg) {
