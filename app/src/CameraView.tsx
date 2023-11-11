@@ -112,8 +112,8 @@ const uploadToGpt = async (imageBase64: string) => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   return {
     item_name: "Power Bank",
-    saved_CO2_kg: 10,
-    comparision: "25 km driven",
+    saved_CO2_kg: 15,
+    comparision: "= planting 30 trees",
   };
 
   const res = await fetch(

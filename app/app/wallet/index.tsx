@@ -23,8 +23,10 @@ const wallet = (props: Props) => {
                     shadowRadius: 3.84,
                     elevation: 5,
                 }}>
-                    <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10, color: 'white' }}>Your Balance</Text>
-                    <Text style={{ fontSize: 60, fontWeight: 'bold', color: 'white' }}>52</Text>
+                    <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10, color: 'white', 
+                fontFamily: "Poppins_700Bold", }}>Your Balance</Text>
+                    <Text style={{ fontSize: 60, fontWeight: 'bold', color: 'white', 
+                fontFamily: "Poppins_700Bold", }}>52</Text>
                 </View>
 
                 <OfferDetails

@@ -93,6 +93,7 @@ const DetailsScreen = (props: Props) => {
                 top: "44%",
                 left: "40%",
                 fontSize: 36,
+                fontFamily: "Poppins_500Medium",
               }}
             >
               {points}
@@ -103,9 +104,10 @@ const DetailsScreen = (props: Props) => {
                 top: "35%",
                 left: "42%",
                 fontSize: 12,
+                fontFamily: "Poppins_500Medium",
               }}
             >
-              Points
+              points
             </Text>
           </TouchableOpacity>
           <View
@@ -126,17 +128,31 @@ const DetailsScreen = (props: Props) => {
                 fontSize: 48,
                 fontWeight: "bold",
                 marginBottom: 10,
+                fontFamily: "Poppins_700Bold",
               }}
             >
               15
             </Text>
-            <Text style={{ textAlign: "center" }}>kg of</Text>
             <Text
-              style={{ textAlign: "center", fontSize: 24, marginVertical: 10 }}
+              style={{ textAlign: "center", fontFamily: "Poppins_500Medium" }}
+            >
+              kg of
+            </Text>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: 24,
+                marginVertical: 10,
+                fontFamily: "Poppins_500Medium",
+              }}
             >
               CO2
             </Text>
-            <Text style={{ textAlign: "center" }}>reduced</Text>
+            <Text
+              style={{ textAlign: "center", fontFamily: "Poppins_500Medium" }}
+            >
+              reduced
+            </Text>
           </View>
         </View>
 
@@ -200,10 +216,10 @@ const DetailsScreen = (props: Props) => {
 
           }}
         >
-          <Text style={{ fontSize: 36, marginBottom: 10 }}>
+          <Text style={{ fontSize: 36, marginBottom: 10, fontFamily: "Poppins_500Medium", }}>
             Why recycle?
           </Text>
-          <Text style={{ fontSize: 18 }}>
+          <Text style={{ fontSize: 18, fontFamily: "Poppins_500Medium", }}>
             Saves CRM (Critical Raw Materials) extraction by 30%, prevents 80 kWh energy use, and cuts 15 kg CO2 emissions per ton, forging a sustainable future.
           </Text>
         </View>
@@ -216,8 +232,16 @@ const DetailsScreen = (props: Props) => {
             marginTop: 10,
           }}
         >
-          <Text style={{ fontSize: 36, marginBottom: 10 }}>How to recycle</Text>
-          <Text style={{ fontSize: 18 }}>
+          <Text
+            style={{
+              fontSize: 36,
+              marginBottom: 10,
+              fontFamily: "Poppins_500Medium",
+            }}
+          >
+            How to recycle
+          </Text>
+          <Text style={{ fontSize: 18, fontFamily: "Poppins_500Medium" }}>
             Bring it to the nearest recycling station
           </Text>
         </View>

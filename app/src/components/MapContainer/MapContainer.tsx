@@ -3,9 +3,11 @@ import { StyleSheet, View, Text, ActivityIndicator, Image, Linking, TouchableOpa
 import Mapbox from '@rnmapbox/maps';
 import * as Location from 'expo-location';
 
-Mapbox.setAccessToken('pk.eyJ1IjoibWJtcGgiLCJhIjoiY2tya2F0OTJvMGk1YjJwbGZ1bDJ1eGU0dCJ9.fLJp01SsIpdhGmWdBzaSnQ');
+Mapbox.setAccessToken(
+    "pk.eyJ1IjoibWJtcGgiLCJhIjoiY2tya2F0OTJvMGk1YjJwbGZ1bDJ1eGU0dCJ9.fLJp01SsIpdhGmWdBzaSnQ"
+);
 
-type Props = {}
+type Props = {};
 
 const MapContainer = (props: Props) => {
     const [location, setLocation] = useState(null);
@@ -13,10 +15,9 @@ const MapContainer = (props: Props) => {
 
     useEffect(() => {
         (async () => {
-
             let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied');
+            if (status !== "granted") {
+                setErrorMsg("Permission to access location was denied");
                 return;
             }
 
@@ -122,4 +123,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MapContainer
+export default MapContainer;
