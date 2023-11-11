@@ -129,7 +129,7 @@ const uploadToGpt = async (imageBase64: string) => {
   console.log("got GPT response");
 
   const json = await res.json();
-  return json.choices[0].message.content as GptClassification;
+  return json as GptClassification;
 };
 
 const takeAndProcessPhoto = async (
@@ -190,6 +190,8 @@ export const CameraView = () => {
   const [boundingBox, setBoundingBox] = useState<BoundingBoxResult | null>(
     null
   );
+
+  
 
   useEffect(() => {
     let ended = false;
