@@ -21,7 +21,7 @@ const DetailsCard: FC<Props> = ({ boundingBox }) => {
   const { classification } = boundingBox;
 
   const parentHeight = useSharedValue(0);
-  if (Math.abs(parentHeight.value - boundingBox.height) > 100)
+  if (Math.abs(parentHeight.value - boundingBox.height) > 200)
     parentHeight.value = boundingBox.height - 5;
   const style = useAnimatedStyle(() => {
     return {
@@ -60,7 +60,7 @@ const DetailsCard: FC<Props> = ({ boundingBox }) => {
 
   const center = {
     x: boundingBox.left + boundingBox.width / 2,
-    y: boundingBox.top + boundingBox.height / 2,
+    y: boundingBox.top + boundingBox.height / 2 * 0.6,
     width: 200,
     height: 180,
   };
@@ -117,13 +117,20 @@ const DetailsCard: FC<Props> = ({ boundingBox }) => {
                 {classification.item_name}
               </Text>
               <Text style={{ fontSize: 16, color: "#fff" }}>
-                recycle {classification.saved_CO2_kg} kg CO2
+                {classification.saved_CO2_kg} kg CO2
               </Text>
               <Text style={{ fontSize: 16, marginBottom: 8, color: "#fff" }}>
                 {classification.comparision}
               </Text>
-              <Text style={{ fontSize: 16, marginBottom: 16, color: "#fff" }}>
-                {classification.saved_CO2_kg.toFixed()} Points
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  marginBottom: 16,
+                  color: "#fff",
+                }}
+              >
+                {classification.saved_CO2_kg.toFixed()} points
               </Text>
               <View
                 style={{
@@ -134,7 +141,9 @@ const DetailsCard: FC<Props> = ({ boundingBox }) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={{ fontSize: 14 }}>Details...</Text>
+                <Text style={{ fontSize: 14, fontWeight: "bold" }}>
+                  Details
+                </Text>
               </View>
             </View>
           </Link>

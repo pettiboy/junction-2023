@@ -105,7 +105,7 @@ const DetailsScreen = (props: Props) => {
                 fontSize: 12,
               }}
             >
-              Points
+              points
             </Text>
           </TouchableOpacity>
           <View
