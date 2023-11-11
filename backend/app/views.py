@@ -93,3 +93,31 @@ def generate_typed_response():
     response = get_typed_response(item_name)
 
     return response
+
+
+@app.route("/submit-recycled-item", methods=["POST"])
+def submit_recycled_item():
+    data = request.get_json()
+
+    item_name = data["item_name"]
+    saved_CO2_kg = data["saved_CO2_kg"]
+    recycle_date = data["recycle_date"]
+
+    print(f"Item name: {item_name}")
+    print(f"Saved CO2: {saved_CO2_kg}")
+
+    currentPoints = 0
+
+    if saved_CO2_kg > 0:
+        currentPoints = currentPoints + saved_CO2_kg
+        recycle_data = {
+            "item_name": item_name,
+            "saved_CO2_kg": saved_CO2_kg,
+            "recycle_date": recycle_date,
+        }
+        print(recycle_data)
+
+    print(f"Current points: {currentPoints}")
+
+
+
