@@ -150,7 +150,7 @@ def get_item_recycle_info():
         messages=[
             {
                 "role": "system",
-                "content": f"What raw materials can be recycled and in what percentage from ${item_name}? Please provide the information in the following schema: {json.dumps(schema)}. The response should only contain JSON and no other text.",
+                "content": f"What raw materials can be recycled and in what percentage from ${item_name}? Please provide the information in the following schema: {json.dumps(schema)}. The response should only contain JSON and no other text. Please avoid comments in the JSON. Avoid the object if the percentage says 'varies'.",
             },
             {
                 "role": "user",
