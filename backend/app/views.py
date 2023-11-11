@@ -120,3 +120,46 @@ def submit_recycled_item():
         print(recycle_data)
 
     print(f"Current points: {currentPoints}")
+
+
+@app.route("/get-item-recycle-info", methods=["GET"])
+def get_item_recycle_info():
+    item_name = request.args.get("item_name")
+    print(f"Item name: {item_name}")
+
+    client = OpenAI(api_key=gpt_api_key)
+
+    schema = (
+        {
+            "type": "object",
+            "properties": {
+                "rm_data": {
+                    "type": "object",
+                    "properties": {
+                        "material": {"type": "string"},
+                        "percentage": {"type": "number"},
+                    },
+                },
+            },
+            "required": ["rm_data"],
+        },
+    )
+
+    response = client.chat.completions.create(
+        model="gpt-4-1106-preview",
+        messages=[
+            {
+                "role": "system",
+                "content": f"What raw materials can be recycled and in what percentage from ${item_name}? Please provide the information in the following schema: {json.dumps(schema)}",
+            },
+            {
+                "role": "user",
+                "content": item_name,
+            },
+        ],
+        max_tokens=500,
+    )
+
+    print(response.choices[0].message.content)
+
+    return response.choices[0].message.content
