@@ -58,7 +58,7 @@ const DetailsScreen = (props: Props) => {
   const containerPadding = 20;
   const chartHeight = 220;
 
-  const points = 55;
+  const points = 15;
 
   return (
     <SafeAreaView style={{ marginHorizontal: containerPadding }}>
@@ -128,7 +128,7 @@ const DetailsScreen = (props: Props) => {
                 marginBottom: 10,
               }}
             >
-              54
+              15
             </Text>
             <Text style={{ textAlign: "center" }}>kg of</Text>
             <Text
@@ -151,28 +151,28 @@ const DetailsScreen = (props: Props) => {
           <PieChart
             data={[
               {
-                name: "Seoul",
-                population: 21500000,
+                name: "Lithium",
+                population: 25,
                 color: "#4CAF50", // Green color
               },
               {
-                name: "Toronto",
-                population: 2800000,
+                name: "Cobalt",
+                population: 10,
                 color: "#689F38", // Dark green color
               },
               {
-                name: "Beijing",
-                population: 527612,
+                name: "Nickel",
+                population: 15,
                 color: "#8BC34A", // Light green color
               },
               {
-                name: "New York",
-                population: 8538000,
+                name: "Copper",
+                population: 20,
                 color: "#CDDC39", // Lime color
               },
               {
-                name: "Moscow",
-                population: 11920000,
+                name: "Aluminium",
+                population: 30,
                 color: "#FFEB3B", // Yellow color
               },
             ]}
@@ -197,13 +197,14 @@ const DetailsScreen = (props: Props) => {
             borderRadius: 20,
             padding: 15,
             marginTop: 10,
+
           }}
         >
           <Text style={{ fontSize: 36, marginBottom: 10 }}>
-            Should I recycle?
+            Why recycle?
           </Text>
           <Text style={{ fontSize: 18 }}>
-            Its important to reccycle your laptop because ...
+            Saves CRM (Critical Raw Materials) extraction by 30%, prevents 80 kWh energy use, and cuts 15 kg CO2 emissions per ton, forging a sustainable future.
           </Text>
         </View>
 
