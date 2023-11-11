@@ -1,48 +1,68 @@
-import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
-import OfferDetails from '../../src/components/OfferDetails/OfferDetails'
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import OfferDetails from "../../src/components/OfferDetails/OfferDetails";
+import { useLayoutEffect } from "react";
+import { useNavigation } from "expo-router";
 
-type Props = {}
+type Props = {};
 
 const wallet = (props: Props) => {
-    return (
-        <SafeAreaView>
-            <View style={{ padding: 20 }}>
-                <View style={{
-                    backgroundColor: "#4CAF50",
-                    padding: 20,
-                    borderRadius: 10,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginTop: 20,
-                    shadowColor: "#000",
-                    shadowOffset: {
-                        width: 0,
-                        height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                }}>
-                    <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10, color: 'white', 
-                fontFamily: "Poppins_700Bold", }}>Your Balance</Text>
-                    <Text style={{ fontSize: 60, fontWeight: 'bold', color: 'white', 
-                fontFamily: "Poppins_700Bold", }}>52</Text>
-                </View>
+  const navigation = useNavigation();
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "Wallet",
+      headerBackTitle: "Back",
+    });
+  }, [navigation]);
 
-                <OfferDetails
-                    title='Starbucks'
-                    discount='5%'
-                    points='25'
-                />
+  return (
+    <SafeAreaView>
+      <View style={{ padding: 20 }}>
+        <View
+          style={{
+            backgroundColor: "#4CAF50",
+            padding: 20,
+            borderRadius: 10,
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 20,
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: "bold",
+              marginBottom: 10,
+              color: "white",
+              fontFamily: "Poppins_700Bold",
+            }}
+          >
+            Your Balance
+          </Text>
+          <Text
+            style={{
+              fontSize: 60,
+              fontWeight: "bold",
+              color: "white",
+              fontFamily: "Poppins_700Bold",
+            }}
+          >
+            52
+          </Text>
+        </View>
 
-                <OfferDetails
-                    title='Roberts Coffee'
-                    discount='9%'
-                    points='35'
-                />
+        <OfferDetails title="Starbucks" discount="5%" points="25" />
 
+        <OfferDetails title="Roberts Coffee" discount="9%" points="35" />
 
-                {/* <View style={{
+        {/* <View style={{
                     backgroundColor: "#EAF9E1",
                     padding: 20,
                     borderRadius: 10,
@@ -78,11 +98,9 @@ const wallet = (props: Props) => {
                         <Text style={{ color: 'white', fontSize: 18 }}>Claim Your Reward</Text>
                     </TouchableOpacity>
                 </View> */}
+      </View>
+    </SafeAreaView>
+  );
+};
 
-            </View>
-
-        </SafeAreaView>
-    )
-}
-
-export default wallet
+export default wallet;
