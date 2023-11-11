@@ -1,7 +1,7 @@
 import { BlurView } from "expo-blur";
 import { FlipType, SaveFormat, manipulateAsync } from "expo-image-manipulator";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { Dimensions, Image, StyleSheet, View, Text, } from "react-native";
+import { Dimensions, Image, StyleSheet, View, Text } from "react-native";
 import MlkitOdt, {
   ObjectDetectionResult,
   ObjectDetectorMode,
@@ -27,7 +27,6 @@ type BoundingBoxResult = {
 };
 
 const getObjectDetectionResult = (photo: PhotoFile) => {
-  console.log("asking MLKit")
   return MlkitOdt.detectFromUri("file:///" + photo.path, {
     detectorMode: ObjectDetectorMode.STREAM,
     shouldEnableClassification: false,
@@ -52,6 +51,7 @@ const getBoundingBox = (
     height: bounding.width / photoWidth,
     width: bounding.height / photoHeight,
   };
+
   return {
     photo,
     detection,
@@ -66,6 +66,10 @@ const getBoundingBox = (
       lastBox?.detection.trackingID === detection.trackingID
         ? lastBox.sameIdRepetition + 1
         : 0,
+    classification:
+      lastBox?.detection.trackingID === detection.trackingID
+        ? lastBox.classification
+        : undefined,
   };
 };
 
@@ -77,9 +81,9 @@ const cropBoundingBox = async ({ photo, detection }: BoundingBoxResult) => {
   const originX = Math.max(
     0,
     photo.height -
-    detection.bounding.height -
-    detection.bounding.originY -
-    detection.bounding.height * 0.1
+      detection.bounding.height -
+      detection.bounding.originY -
+      detection.bounding.height * 0.1
   );
   const height = Math.min(
     photo.width - originX,
@@ -113,33 +117,34 @@ type GptClassification = {
 
 const uploadToGpt = async (imageBase64: string) => {
   // TODO
-  // return { label: "TODO" };
-  console.log("asking GPT")
+  console.log("asking GPT");
   // console.log(imageBase64)
   // return
 
-  const res = await fetch("https://c895-2001-14bb-111-af71-7807-c07b-b06e-d28b.ngrok-free.app/generate-response", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      image: imageBase64,
-    }),
-  });
+  const res = await fetch(
+    "https://junction-backend-vok2n3ogoq-lz.a.run.app/generate-response",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        image: imageBase64,
+      }),
+    }
+  );
   if (!res.ok) {
-    console.log(res.status)
-    throw new Error("Failed to upload to GPT")
-  };
+    console.log(res.status);
+    throw new Error("Failed to upload to GPT");
+  }
 
-  console.log("got GPT response")
+  console.log("got GPT response");
 
   return (await res.json()) as GptClassification;
 };
 
 const takeAndProcessPhoto = async (
   camera: Camera,
-  lastBox: BoundingBoxResult | undefined,
   setBoundingBox: Dispatch<SetStateAction<BoundingBoxResult | undefined>>
 ) => {
   const photo = await camera.takePhoto({
@@ -148,32 +153,37 @@ const takeAndProcessPhoto = async (
     enableShutterSound: false,
   });
   const result = await getObjectDetectionResult(photo);
-  const boundingBox = getBoundingBox(photo, result[0], lastBox);
 
-  setBoundingBox(boundingBox);
-  console.log(boundingBox?.sameIdRepetition)
+  const getGptResultAsync = async (boundingBox: BoundingBoxResult) => {
+    // on second screenshot of the same object, take a screenshot and get GPT result from it
+    if (boundingBox && boundingBox.sameIdRepetition === 1) {
+      const image = await cropBoundingBox(boundingBox);
 
-  // on second screenshot of the same object, take a screenshot and get GPT result from it
-  if (boundingBox) {
-    const image = await cropBoundingBox(boundingBox);
+      console.log("got cropped image");
+      console.log(image.base64.substring(0, 50) + "...");
 
-    console.log("got cropped image")
-    console.log(image.base64.substring(0, 50) + "...")
+      const classification = await uploadToGpt(image.base64);
 
-    const classification = await uploadToGpt(image.base64);
+      console.log(classification);
 
-    console.log(classification)
+      setBoundingBox((b) => {
+        // only set bounding box if it's still the same object we're tracking
+        if (b.detection.trackingID !== boundingBox.detection.trackingID)
+          return b;
 
-    setBoundingBox((b) => {
-      // only set bounding box if it's still the same object we're tracking
-      if (b.detection.trackingID !== boundingBox.detection.trackingID) return b;
+        return {
+          ...b,
+          classification,
+        };
+      });
+    }
+  };
 
-      return {
-        ...b,
-        classification,
-      };
-    });
-  }
+  setBoundingBox((lastBox) => {
+    const box = getBoundingBox(photo, result[0], lastBox);
+    void getGptResultAsync(box); // do not await
+    return box;
+  });
 };
 
 export const CameraView = () => {
@@ -186,6 +196,7 @@ export const CameraView = () => {
       },
     },
   ]);
+
   const ref = useRef<Camera>(null);
   const [boundingBox, setBoundingBox] = useState<BoundingBoxResult>();
 
@@ -194,7 +205,7 @@ export const CameraView = () => {
     const runLoop = () => {
       setTimeout(async () => {
         if (ended) return;
-        await takeAndProcessPhoto(ref.current!, boundingBox, setBoundingBox);
+        await takeAndProcessPhoto(ref.current!, setBoundingBox);
 
         runLoop();
       }, 1000);

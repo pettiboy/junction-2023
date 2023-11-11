@@ -1,15 +1,14 @@
 from app import app
 # from openai import OpenAI
 import requests
-import base64
-from flask import request, jsonify
+from flask import request
+import os
 # import sys
 
 # from utils import encode_image
 
-
-
-gpt_api_key="API_KEY"
+# use environment variable called OPENAI_API_KEY
+gpt_api_key = os.environ.get("OPENAI_API_KEY")
 
 
 @app.route('/')
