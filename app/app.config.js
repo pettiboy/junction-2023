@@ -1,6 +1,7 @@
 export default {
   name: "Junction 2023",
   slug: "junction2023",
+  scheme: "junction2023",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/icon.png",

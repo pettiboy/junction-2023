@@ -4,6 +4,7 @@ module.exports = function (api) {
     plugins: [
       "react-native-reanimated/plugin",
       "react-native-worklets-core/plugin",
+      "expo-router/babel",
     ],
     presets: ["babel-preset-expo"],
   };
