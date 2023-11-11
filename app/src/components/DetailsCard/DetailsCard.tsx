@@ -1,72 +1,60 @@
-import { BlurView } from 'expo-blur'
-import { View, Text } from 'react-native'
+import { BlurView } from "expo-blur";
+import { View, Text } from "react-native";
+import { BoundingBoxResult } from "../../BoundingBoxResult";
+import { FC } from "react";
 
 type Props = {
-    boundingBox: any
-}
+  boundingBox: BoundingBoxResult;
+};
 
-const DetailsCard = ({ boundingBox }: Props) => {
-    return (
-        boundingBox ? (
-            <>
-                <View
-                    style={{
-                        position: "absolute",
-                        top: boundingBox.top,
-                        left: boundingBox.left,
-                        width: boundingBox.width,
-                        height: boundingBox.height,
-                    }}
-                />
-                {/* Frosted glass card */}
-                <View
-                    style={{
-                        position: "absolute",
+const DetailsCard: FC<Props> = ({ boundingBox }) => {
+  const { classification } = boundingBox;
 
-                        //--------------------- on the side of the object
-                        // top: boundingBox.top,
-                        // left: boundingBox.left + boundingBox.width,
-                        // width: 150,
-                        // height: "auto",
+  if (!classification) return null;
 
-                        //--------------------- covering the object
-                        top: boundingBox.top,
-                        left: boundingBox.left,
-                        width: boundingBox.width,
-                        height: boundingBox.height,
+  return (
+    <View
+      style={{
+        position: "absolute",
+        top: boundingBox.top - 50,
+        left: boundingBox.left - 50,
+        width: boundingBox.width + 50,
+        height: boundingBox.height + 50,
 
-                        borderRadius: 10, // Adjust the value as needed
-                        overflow: "hidden", // This is important for the borderRadius to take effect
-                    }}
-                >
-                    <BlurView
-                        style={{
-                            // position: "absolute",
-                            flex: 1,
-                        }}
-                        tint="light"
-                        intensity={15}
-                    >
-                        {/* Card content */}
-                        <View style={{ padding: 10 }}>
-                            <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>
-                                Bicycle
-                            </Text>
-                            <Text style={{ fontSize: 14, marginBottom: 5 }}>
-                                Recyclability: 3/5
-                            </Text>
-                            <Text style={{ fontSize: 14, marginBottom: 5 }}>
-                                Materials to recycle: ???
-                            </Text>
-                            <Text style={{ fontSize: 14 }}>
-                                How to recycle: Go to ...
-                            </Text>
-                        </View>
-                    </BlurView>
-                </View>
-            </>
-        ) : null
-    )
-}
+        borderRadius: 16,
+        overflow: "hidden",
+      }}
+    >
+      <BlurView
+        style={{
+          // position: "absolute",
+          flex: 1,
+        }}
+        tint="light"
+        intensity={15}
+      >
+        {/* Card content */}
+        <View style={{ padding: 10 }}>
+          <Text style={{ fontSize: 12, marginBottom: 8 }}>Recycle Impact</Text>
+          <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 8 }}>
+            {classification.item_name}
+          </Text>
+          <Text style={{ fontSize: 14 }}>
+            {classification.saved_CO2_kg} kg CO2 saved
+          </Text>
+          <Text style={{ fontSize: 14, marginBottom: 8 }}>
+            equivalent to {classification.comparision}
+          </Text>
+          <Text style={{ fontSize: 18, marginBottom: 8 }}>
+            {classification.saved_CO2_kg.toFixed()} Points
+          </Text>
+          <View style={{ backgroundColor: '#006CA5'}}>
+            <Text style={{ fontSize: 14 }}>Details...</Text>
+          </View>
+        </View>
+      </BlurView>
+    </View>
+  );
+};
 
-export default DetailsCard
+export default DetailsCard;

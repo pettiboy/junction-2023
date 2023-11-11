@@ -14,7 +14,9 @@ def index():
 
 
 def get_item_name(image):
-    client = OpenAI(api_key=gpt_api_key)
+    return "Logitech Mouse M100"
+
+    client = OpenAI(api_key=gpt_api_key, organization="org-83KHPVpRqhjKdLUPiyWXX2CY")
     response = client.chat.completions.create(
         model="gpt-4-vision-preview",
         messages=[
@@ -62,7 +64,7 @@ def get_typed_response(item_name):
         "required": ["item_name", "statement", "saved_CO2_kg", "comparision"],
     }
 
-    client = OpenAI(api_key=gpt_api_key)
+    client = OpenAI(api_key=gpt_api_key, organization="org-83KHPVpRqhjKdLUPiyWXX2CY")
     response = client.chat.completions.create(
         model="gpt-4-1106-preview",
         messages=[
@@ -82,7 +84,7 @@ def get_typed_response(item_name):
 
     print(response.choices[0].message.function_call.arguments)
 
-    return response.choices[0].message.function_call.arguments
+    return json.loads(response.choices[0].message.function_call.arguments)
 
 
 @app.route("/generate-response", methods=["POST"])
@@ -93,3 +95,71 @@ def generate_typed_response():
     response = get_typed_response(item_name)
 
     return response
+
+
+@app.route("/submit-recycled-item", methods=["POST"])
+def submit_recycled_item():
+    data = request.get_json()
+
+    item_name = data["item_name"]
+    saved_CO2_kg = data["saved_CO2_kg"]
+    recycle_date = data["recycle_date"]
+
+    print(f"Item name: {item_name}")
+    print(f"Saved CO2: {saved_CO2_kg}")
+
+    currentPoints = 0
+
+    if saved_CO2_kg > 0:
+        currentPoints = currentPoints + saved_CO2_kg
+        recycle_data = {
+            "item_name": item_name,
+            "saved_CO2_kg": saved_CO2_kg,
+            "recycle_date": recycle_date,
+        }
+        print(recycle_data)
+
+    print(f"Current points: {currentPoints}")
+
+
+@app.route("/get-item-recycle-info", methods=["GET"])
+def get_item_recycle_info():
+    item_name = request.args.get("item_name")
+    print(f"Item name: {item_name}")
+
+    client = OpenAI(api_key=gpt_api_key)
+
+    schema = (
+        {
+            "type": "object",
+            "properties": {
+                "rm_data": {
+                    "type": "object",
+                    "properties": {
+                        "material": {"type": "string"},
+                        "percentage": {"type": "number"},
+                    },
+                },
+            },
+            "required": ["rm_data"],
+        },
+    )
+
+    response = client.chat.completions.create(
+        model="gpt-4-1106-preview",
+        messages=[
+            {
+                "role": "system",
+                "content": f"What raw materials can be recycled and in what percentage from ${item_name}? Please provide the information in the following schema: {json.dumps(schema)}. The response should only contain JSON and no other text.",
+            },
+            {
+                "role": "user",
+                "content": item_name,
+            },
+        ],
+        max_tokens=500,
+    )
+
+    print(response.choices[0].message.content)
+
+    return json.loads(response.choices[0].message.content.replace("json", ""))
