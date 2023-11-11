@@ -140,7 +140,8 @@ const uploadToGpt = async (imageBase64: string) => {
 
   console.log("got GPT response");
 
-  return (await res.json()) as GptClassification;
+  const json = await res.json();
+  return json.choices[0].message.content as GptClassification;
 };
 
 const takeAndProcessPhoto = async (
