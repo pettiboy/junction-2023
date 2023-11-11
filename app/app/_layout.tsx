@@ -12,6 +12,7 @@ import {
   Poppins_700Bold,
 } from "@expo-google-fonts/poppins";
 import { useEffect } from "react";
+import { StatusBar } from "expo-status-bar";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -35,11 +36,14 @@ export default function Layout() {
 
   // Render the children routes now that all the assets are loaded.
   return (
-    <Stack
-      screenOptions={{
-        animation: "slide_from_bottom",
-        headerBackButtonMenuEnabled: true,
-      }}
-    />
+    <>
+      <StatusBar style="light" />
+      <Stack
+        screenOptions={{
+          animation: "slide_from_bottom",
+          headerBackButtonMenuEnabled: true,
+        }}
+      />
+    </>
   );
 }

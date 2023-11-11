@@ -158,8 +158,6 @@ const takeAndProcessPhoto = async (
 
       const classification = await uploadToGpt(image.base64);
 
-      console.log(classification);
-
       setBoundingBox((b) => {
         // only set bounding box if it's still the same object we're tracking
         if (b?.detection.trackingID !== boundingBox.detection.trackingID)
@@ -204,7 +202,7 @@ export const CameraView = () => {
         await takeAndProcessPhoto(ref.current!, setBoundingBox);
 
         runLoop();
-      }, 1);
+      }, 10);
     };
     runLoop();
     return () => {

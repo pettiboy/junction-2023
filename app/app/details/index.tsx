@@ -66,7 +66,7 @@ const DetailsScreen = (props: Props) => {
         {/* header */}
         <View style={{ display: "flex", flexDirection: "row" }}>
           <TouchableOpacity
-            onPress={() => router.replace("/wallet")}
+            onPress={() => router.push("/wallet")}
             style={{
               position: "relative",
               flex: 0.6,
@@ -213,14 +213,21 @@ const DetailsScreen = (props: Props) => {
             borderRadius: 20,
             padding: 15,
             marginTop: 10,
-
           }}
         >
-          <Text style={{ fontSize: 36, marginBottom: 10, fontFamily: "Poppins_500Medium", }}>
+          <Text
+            style={{
+              fontSize: 36,
+              marginBottom: 10,
+              fontFamily: "Poppins_500Medium",
+            }}
+          >
             Why recycle?
           </Text>
-          <Text style={{ fontSize: 18, fontFamily: "Poppins_500Medium", }}>
-            Saves CRM (Critical Raw Materials) extraction by 30%, prevents 80 kWh energy use, and cuts 15 kg CO2 emissions per ton, forging a sustainable future.
+          <Text style={{ fontSize: 18, fontFamily: "Poppins_500Medium" }}>
+            Saves CRM (Critical Raw Materials) extraction by 30%, prevents 80
+            kWh energy use, and cuts 15 kg CO2 emissions per ton, forging a
+            sustainable future.
           </Text>
         </View>
 
