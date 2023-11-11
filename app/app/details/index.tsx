@@ -28,7 +28,7 @@ const DetailsScreen = (props: Props) => {
 
     const chartConfig = {
         backgroundColor: "#EAF9E1", // Light green background
-        backgroundGradientFrom: "#EAF9E1", // Light green gradient start
+        backgroundGradientFrom: "#C0E3C0", // Light green gradient start
         backgroundGradientTo: "#C0E3C0", // Darker green gradient end
         decimalPlaces: 2,
         color: (opacity = 0.8) => `rgba(0, 100, 0, ${opacity})`, // Green color
@@ -78,7 +78,7 @@ const DetailsScreen = (props: Props) => {
                         <Text style={{ position: "absolute", top: "35%", left: "28%", fontSize: 12 }}>GreenDropSpot</Text>
                     </View>
                     <View style={{
-                        margin: 10, padding: 10, backgroundColor: chartConfig.backgroundGradientTo, borderRadius: style.borderRadius, flex: 0.4, marginLeft: 20,
+                        marginLeft: 10, marginVertical: 10, padding: 10, backgroundColor: chartConfig.backgroundGradientTo, borderRadius: style.borderRadius, flex: 0.4, marginLeft: 20,
                         justifyContent: "center",
                         alignItems: "center"
                     }}>
@@ -136,12 +136,12 @@ const DetailsScreen = (props: Props) => {
 
                 </View>
 
-                <View style={{ backgroundColor: chartConfig.backgroundGradientTo, borderRadius: 20, padding: 15, marginVertical: 10 }}>
+                <View style={{ backgroundColor: chartConfig.backgroundGradientTo, borderRadius: 20, padding: 15, marginTop: 10 }}>
                     <Text style={{ fontSize: 36, marginBottom: 10 }}>Should I recycle?</Text>
                     <Text style={{ fontSize: 18 }}>Its important to reccycle your laptop because ...</Text>
                 </View>
 
-                <View style={{ backgroundColor: chartConfig.backgroundGradientTo, borderRadius: 20, padding: 15, marginVertical: 10 }}>
+                <View style={{ backgroundColor: chartConfig.backgroundGradientTo, borderRadius: 20, padding: 15, marginTop: 10 }}>
                     <Text style={{ fontSize: 36, marginBottom: 10 }}>How to recycle</Text>
                     <Text style={{ fontSize: 18 }}>Bring it to the nearest recycling station</Text>
                 </View>
@@ -207,7 +207,9 @@ const DetailsScreen = (props: Props) => {
                     />
                 </View> */}
 
-                <MapContainer />
+                <View style={{ marginTop: 10 }}>
+                    <MapContainer />
+                </View>
 
 
             </ScrollView>
