@@ -74,6 +74,7 @@ const getBoundingBox = (
 };
 
 const cropBoundingBox = async ({ photo, detection }: BoundingBoxResult) => {
+  console.log("photo", photo.width, photo.height);
   const originY = Math.max(
     0,
     detection.bounding.originX - detection.bounding.width * 0.1
@@ -140,7 +141,8 @@ const uploadToGpt = async (imageBase64: string) => {
 
   console.log("got GPT response");
 
-  return (await res.json()) as GptClassification;
+  const json = await res.json();
+  return json.choices[0].message.content as GptClassification;
 };
 
 const takeAndProcessPhoto = async (
@@ -191,8 +193,8 @@ export const CameraView = () => {
   const format = useCameraFormat(device, [
     {
       photoResolution: {
-        width: 1920,
-        height: 1080,
+        width: 512,
+        height: 512,
       },
     },
   ]);
@@ -208,7 +210,7 @@ export const CameraView = () => {
         await takeAndProcessPhoto(ref.current!, setBoundingBox);
 
         runLoop();
-      }, 1000);
+      }, 1);
     };
     runLoop();
     return () => {
