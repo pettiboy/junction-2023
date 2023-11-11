@@ -109,7 +109,11 @@ const uploadToGpt = async (imageBase64: string) => {
   });
   console.log("asking GPT");
   // console.log(imageBase64)
-  return;
+  return {
+    item_name: "Power Bank",
+    saved_CO2_kg: 10,
+    comparision: "25 km driven",
+  };
 
   const res = await fetch(
     "https://junction-backend-vok2n3ogoq-lz.a.run.app/generate-response",
