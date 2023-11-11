@@ -1,3 +1,4 @@
+import { BlurView } from "expo-blur";
 import { FlipType, SaveFormat, manipulateAsync } from "expo-image-manipulator";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Dimensions, Image, StyleSheet, View, Text, } from "react-native";
@@ -11,6 +12,7 @@ import {
   useCameraDevice,
   useCameraFormat,
 } from "react-native-vision-camera";
+import DetailsCard from "./components/DetailsCard/DetailsCard";
 
 type BoundingBoxResult = {
   top: number;
@@ -195,19 +197,8 @@ export const CameraView = () => {
         photo={true}
         orientation="portrait"
       />
-      {boundingBox && (
-        <View
-          style={{
-            position: "absolute",
-            top: boundingBox.top,
-            left: boundingBox.left,
-            width: boundingBox.width,
-            height: boundingBox.height,
-            borderWidth: 2,
-            borderColor: "red",
-          }}
-        />
-      )}
+
+      <DetailsCard boundingBox={boundingBox} />
     </>
   );
 };

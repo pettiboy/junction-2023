@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Camera, CameraPermissionStatus } from "react-native-vision-camera";
 import { InstagramOverlay } from "./src/InstagramOverlay";
 import { CameraView } from "./src/CameraView";
