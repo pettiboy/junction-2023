@@ -1,13 +1,13 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 import { CameraView } from "./CameraView";
-import {
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export const InstagramOverlay = () => {
-  const { bottom, left, right } = useSafeAreaInsets();
+  const { top, bottom, left, right } = useSafeAreaInsets();
   return (
-    <View style={{ paddingBottom: bottom, paddingLeft: left, paddingRight: right }}>
+    <View
+      style={{ paddingBottom: bottom, paddingLeft: left, paddingRight: right }}
+    >
       {/* the top conatiner containing the camera */}
       <View
         style={{
@@ -28,6 +28,7 @@ export const InstagramOverlay = () => {
             alignItems: "center",
             marginTop: 20,
             marginHorizontal: 20,
+            paddingTop: top,
           }}
         >
           <Image
@@ -121,7 +122,7 @@ export const InstagramOverlay = () => {
           />
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
