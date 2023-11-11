@@ -1,5 +1,5 @@
 import { Link, router, useNavigation } from "expo-router";
-import React from "react";
+import React, { useContext } from "react";
 import {
   Dimensions,
   SafeAreaView,
@@ -17,11 +17,16 @@ import {
   StackedBarChart,
 } from "react-native-chart-kit";
 import MapContainer from "../../src/components/MapContainer/MapContainer";
+import MaterialContext from "../../src/contexts/MaterialContext";
 
 type Props = {};
 
 const DetailsScreen = (props: Props) => {
+  const { currentObjectInfo } = useContext(MaterialContext)
+
   const navigation = useNavigation();
+
+
 
   React.useLayoutEffect(() => {
     navigation.setOptions({

@@ -4,6 +4,7 @@ import { CameraView } from "../src/CameraView";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import DetailsScreen from "./details";
 import { InstagramOverlay } from "./instagram/instagram";
+import { MaterialProvider } from "../src/contexts/MaterialContext";
 
 export default function App() {
     const [cameraPermission, setCameraPermission] =

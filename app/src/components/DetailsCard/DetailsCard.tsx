@@ -1,7 +1,7 @@
 import { BlurView } from "expo-blur";
 import { View, Text, TouchableOpacity } from "react-native";
 import { BoundingBoxResult } from "../../BoundingBoxResult";
-import { FC, useDeferredValue } from "react";
+import { FC, useContext, useDeferredValue, useEffect } from "react";
 import { Link } from "expo-router";
 import Animated, {
   useAnimatedStyle,
@@ -12,13 +12,21 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
+import MaterialContext from "../../contexts/MaterialContext";
 
 type Props = {
   boundingBox: BoundingBoxResult;
 };
 
 const DetailsCard: FC<Props> = ({ boundingBox }) => {
+  const { currentObjectInfo, setCurrentObjectInfo } = useContext(MaterialContext);
+
   const { classification } = boundingBox;
+
+  useEffect(() => {
+    if (!classification) return
+    setCurrentObjectInfo(classification)
+  }, [boundingBox])
 
   const parentHeight = useSharedValue(0);
   if (Math.abs(parentHeight.value - boundingBox.height) > 200)
