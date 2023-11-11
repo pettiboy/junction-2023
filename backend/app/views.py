@@ -14,6 +14,9 @@ def index():
 
 
 def get_item_name(image):
+    # dummy
+    return "Logitech Mouse M100"
+
     client = OpenAI(api_key=gpt_api_key)
     response = client.chat.completions.create(
         model="gpt-4-vision-preview",
@@ -118,6 +121,3 @@ def submit_recycled_item():
         print(recycle_data)
 
     print(f"Current points: {currentPoints}")
-
-
-
