@@ -9,12 +9,14 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@rnmapbox/maps": "^10.0.15",
     "@types/react": "~18.2.14",
     "expo": "~49.0.15",
     "expo-blur": "~12.4.1",
     "expo-dev-client": "^2.4.12",
     "expo-file-system": "~15.4.4",
     "expo-image-manipulator": "~11.3.0",
+    "expo-location": "^16.3.0",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",
