@@ -19,7 +19,7 @@ const DetailsScreen = (props: Props) => {
     React.useLayoutEffect(() => {
         navigation.setOptions({
             title: 'Bicycle',
-            headerBackTitle: 'instagram',
+            headerBackTitle: 'Instagram',
         });
     }, [navigation]);
 
@@ -27,11 +27,11 @@ const DetailsScreen = (props: Props) => {
     const windowHeight = Dimensions.get('window').height;
 
     const chartConfig = {
-        backgroundColor: "rgba(200, 200, 200, 0.2)",
-        backgroundGradientFrom: "rgba(200, 200, 200, 0.5)",
-        backgroundGradientTo: "rgba(220, 220, 220, 0.5)",
+        backgroundColor: "#EAF9E1", // Light green background
+        backgroundGradientFrom: "#EAF9E1", // Light green gradient start
+        backgroundGradientTo: "#C0E3C0", // Darker green gradient end
         decimalPlaces: 2,
-        color: (opacity = 0.1) => `rgba(10, 10, 10, ${opacity})`,
+        color: (opacity = 0.8) => `rgba(0, 100, 0, ${opacity})`, // Green color
         labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
         style: {
             borderRadius: 16,
@@ -39,7 +39,7 @@ const DetailsScreen = (props: Props) => {
         propsForDots: {
             r: "6",
             strokeWidth: "2",
-            stroke: "rgba(220, 220, 220, 1)",
+            stroke: "#008000", // Dark green stroke
         },
     };
 
@@ -51,10 +51,102 @@ const DetailsScreen = (props: Props) => {
     const containerPadding = 20
     const chartHeight = 220
 
+
+    const points = 55
+
     return (
         <SafeAreaView style={{ marginHorizontal: containerPadding }}>
             <ScrollView>
-                <View>
+                {/* header */}
+                <View style={{ display: "flex", flexDirection: "row" }}>
+                    <View style={{ position: "relative", flex: 0.6, height: chartHeight + containerPadding }}>
+                        <ProgressChart
+                            data={{
+                                labels: ["Swim"],
+                                data: [points / 100]
+                            }}
+                            width={windowWidth / 2}
+                            height={chartHeight}
+                            strokeWidth={16}
+                            radius={72}
+                            chartConfig={chartConfig}
+                            hideLegend={true}
+                            style={{ ...style, paddingBottom: 30 }}
+                        />
+
+                        <Text style={{ position: "absolute", top: "44%", left: "40%", fontSize: 36 }}>{points}</Text>
+                        <Text style={{ position: "absolute", top: "35%", left: "28%", fontSize: 12 }}>GreenDropSpot</Text>
+                    </View>
+                    <View style={{
+                        margin: 10, padding: 10, backgroundColor: chartConfig.backgroundGradientTo, borderRadius: style.borderRadius, flex: 0.4, marginLeft: 20,
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                        <Text style={{ textAlign: "center", fontSize: 48, fontWeight: "bold", marginBottom: 10 }}>54</Text>
+                        <Text style={{ textAlign: "center" }}>KiloGrams Of</Text>
+                        <Text style={{ textAlign: "center", fontSize: 24, marginVertical: 10 }}>CO2</Text>
+                        <Text style={{ textAlign: "center" }}>Saved</Text>
+                    </View>
+                </View>
+
+
+                {/* pie chart */}
+                <View style={{ backgroundColor: chartConfig.backgroundGradientTo, borderRadius: 20, paddingLeft: 10 }}>
+                    <PieChart
+                        data={[
+                            {
+                                "name": "Seoul",
+                                "population": 21500000,
+                                "color": "#4CAF50", // Green color
+                            },
+                            {
+                                "name": "Toronto",
+                                "population": 2800000,
+                                "color": "#689F38", // Dark green color
+                            },
+                            {
+                                "name": "Beijing",
+                                "population": 527612,
+                                "color": "#8BC34A", // Light green color
+                            },
+                            {
+                                "name": "New York",
+                                "population": 8538000,
+                                "color": "#CDDC39", // Lime color
+                            },
+                            {
+                                "name": "Moscow",
+                                "population": 11920000,
+                                "color": "#FFEB3B", // Yellow color
+                            },
+                        ]}
+                        width={windowWidth - (containerPadding * 2) - 20}
+                        height={chartHeight}
+                        chartConfig={{
+                            ...chartConfig,
+                        }}
+                        backgroundColor={chartConfig.backgroundGradientTo}
+                        accessor="population"
+                        paddingLeft="10"
+                        style={{
+                            borderRadius: 20,
+                            paddingLeft: 10,
+                        }}
+                    />
+
+                </View>
+
+                <View style={{ backgroundColor: chartConfig.backgroundGradientTo, borderRadius: 20, padding: 15, marginVertical: 10 }}>
+                    <Text style={{ fontSize: 36, marginBottom: 10 }}>Should I recycle?</Text>
+                    <Text style={{ fontSize: 18 }}>Its important to reccycle your laptop because ...</Text>
+                </View>
+
+                <View style={{ backgroundColor: chartConfig.backgroundGradientTo, borderRadius: 20, padding: 15, marginVertical: 10 }}>
+                    <Text style={{ fontSize: 36, marginBottom: 10 }}>How to recycle</Text>
+                    <Text style={{ fontSize: 18 }}>Bring it to the nearest recycling station</Text>
+                </View>
+
+                {/* <View>
                     <LineChart
                         data={{
                             labels: ["January", "February", "March", "April", "May", "June"],
@@ -113,49 +205,11 @@ const DetailsScreen = (props: Props) => {
                         yAxisSuffix="k"
                         chartConfig={chartConfig}
                     />
-                </View>
+                </View> */}
 
                 {/* <MapContainer /> */}
 
-                <View>
-                    <PieChart
-                        data={[
-                            {
-                                "name": "Seoul",
-                                "population": 21500000,
-                                "color": "rgba(210, 210, 210, 1)", //
-                            },
-                            {
-                                "name": "Toronto",
-                                "population": 2800000,
-                                "color": "rgba(220, 220, 220, 1)",
-                            },
-                            {
-                                "name": "Beijing",
-                                "population": 527612,
-                                "color": "rgba(180, 180, 180, 0.8)",
-                            },
-                            {
-                                "name": "New York",
-                                "population": 8538000,
-                                "color": "rgba(200, 200, 200, 0.2)",
-                            },
-                            {
-                                "name": "Moscow",
-                                "population": 11920000,
-                                "color": "rgba(160, 160, 160, 0.6)",
-                            }
-                        ]
-                        }
-                        width={windowWidth - (containerPadding * 2)}
-                        height={chartHeight}
-                        chartConfig={chartConfig}
-                        accessor={"population"}
-                        backgroundColor="rgba(200, 200, 200, 1)"
-                        paddingLeft="0"
-                        style={style}
-                    />
-                </View>
+
             </ScrollView>
         </SafeAreaView>
     )

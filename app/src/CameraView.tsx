@@ -120,7 +120,7 @@ const uploadToGpt = async (imageBase64: string) => {
   // TODO
   console.log("asking GPT");
   // console.log(imageBase64)
-  // return
+  return
 
   const res = await fetch(
     "https://junction-backend-vok2n3ogoq-lz.a.run.app/generate-response",
