@@ -31,7 +31,7 @@ const MapContainer = (props: Props) => {
     useEffect(() => {
         if (!location) return
 
-        console.log(getCollectionPointsNearby(location.coords.latitude, location.coords.longitude))
+        // console.log(getCollectionPointsNearby(location.coords.latitude, location.coords.longitude))
     }, [location])
 
     let text = 'Waiting..';

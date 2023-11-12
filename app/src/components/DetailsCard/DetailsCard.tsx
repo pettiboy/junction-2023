@@ -58,7 +58,6 @@ const DetailsCard: FC<Props> = ({ boundingBox }) => {
         top: boundingBox.top,
         left: boundingBox.left,
         width: boundingBox.width,
-        height: boundingBox.height,
       }}
     >
       <Animated.View style={style}></Animated.View>
@@ -83,7 +82,7 @@ const DetailsCard: FC<Props> = ({ boundingBox }) => {
           left: center.x,
 
           width: center.width,
-          height: center.height,
+          height: center.height + 25,
 
           borderRadius: 16,
           overflow: "hidden",

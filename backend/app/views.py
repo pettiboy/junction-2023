@@ -14,7 +14,7 @@ def index():
 
 
 def get_item_name(image):
-    # return "Logitech Mouse M100"
+    return "Logitech Mouse M100"
 
     client = OpenAI(api_key=gpt_api_key, organization="org-83KHPVpRqhjKdLUPiyWXX2CY")
     response = client.chat.completions.create(

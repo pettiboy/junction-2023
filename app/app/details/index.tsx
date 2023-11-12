@@ -7,6 +7,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import {
   LineChart,
@@ -34,7 +35,7 @@ const DetailsScreen = (props: Props) => {
 
     (async () => {
       const res = await fetch(
-        `https://junction-backend-vok2n3ogoq-lz.a.run.app/get-item-recycle-info?item_name=${currentObjectInfo.item_name}`,
+        `https://1758-2001-14bb-111-af71-7129-ba19-4a5b-3a55.ngrok-free.app/get-item-recycle-info?item_name=${currentObjectInfo.item_name}`,
         {
           method: "GET",
           headers: {
@@ -177,7 +178,7 @@ const DetailsScreen = (props: Props) => {
                 fontFamily: "Poppins_700Bold",
               }}
             >
-              15
+              {points}
             </Text>
             <Text
               style={{ textAlign: "center", fontFamily: "Poppins_500Medium" }}
@@ -210,7 +211,7 @@ const DetailsScreen = (props: Props) => {
             paddingLeft: 10,
           }}
         >
-          <PieChart
+          {resourcesChartData ? <PieChart
             data={resourcesChartData}
             width={windowWidth - containerPadding * 2 - 30}
             height={chartHeight}
@@ -224,7 +225,7 @@ const DetailsScreen = (props: Props) => {
               borderRadius: 20,
               paddingLeft: 10,
             }}
-          />
+          /> : <ActivityIndicator style={{ transform: [{ scale: 2 }], margin: 20, }} color={"darkgreen"} size={50} />}
         </View>
 
         <View
