@@ -211,7 +211,7 @@ const DetailsScreen = (props: Props) => {
             paddingLeft: 10,
           }}
         >
-          {resourcesChartData ? <PieChart
+          {resourcesChartData.length < 1 ? <View> <PieChart
             data={resourcesChartData}
             width={windowWidth - containerPadding * 2 - 30}
             height={chartHeight}
@@ -225,7 +225,11 @@ const DetailsScreen = (props: Props) => {
               borderRadius: 20,
               paddingLeft: 10,
             }}
-          /> : <ActivityIndicator style={{ transform: [{ scale: 2 }], margin: 20, }} color={"darkgreen"} size={50} />}
+          />
+
+          </View> : <View>
+            <ActivityIndicator style={{ transform: [{ scale: 2 }], margin: 20, }} color={"darkgreen"} size={50} /><Text style={{ textAlign: "center", marginBottom: 20 }}>Crunching in the latest data for you</Text>
+          </View>}
         </View>
 
         <View
